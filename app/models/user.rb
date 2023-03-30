@@ -1,8 +1,7 @@
 class User < ApplicationRecord
   rolify
 
-
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
   
   devise :database_authenticatable, :authentication_keys => [:username]
