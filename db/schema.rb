@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_30_174324) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_30_225618) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_30_174324) do
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
+  end
+
+  create_table "task_users", id: false, force: :cascade do |t|
+    t.bigint "task_id"
+    t.bigint "user_id"
+    t.index ["task_id", "user_id"], name: "index_task_users_on_task_id_and_user_id"
+    t.index ["task_id"], name: "index_task_users_on_task_id"
+    t.index ["user_id"], name: "index_task_users_on_user_id"
   end
 
   create_table "tasks", force: :cascade do |t|

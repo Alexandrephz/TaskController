@@ -5,3 +5,16 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+roles = Role.create([
+    { name: "Diretoria"},
+    { name: "Tecnolodia da Informação"},
+    { name: "Recursos Humanos"},
+    { name: "Departamento Pessoal"},
+    { name: "Contabilidade"},
+    { name: "Fiscal"},
+    { name: "Marketing"},
+    { name: "Ecommerce"},
+    { name: "Compras"},
+    { name: "Financeiro"},
+    { name: "Logistica"}
+])

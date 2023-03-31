@@ -1,0 +1,38 @@
+
+<%= button_to "logout", destroy_user_session_path, method: :delete  %>
+<h1>Nova Task</h1>
+
+<form action="/tasks" accept-charset="UTF-8" method="post">
+    <%= form_with model: @task, multipart: true do |form| %>
+        <div>
+            <%= form.label :task_name %><br>
+            <%= form.text_field :task_name %>
+        </div>
+
+        <div>
+            <%= form.label :task_content %><br>
+            <%= form.text_area :task_content %>
+        </div>
+
+        <div>
+            <%= form.label :task_expire %><br>
+            <%= form.date_field :task_expire, hide_label: true, class: 'datepicker' %>
+        </div>
+
+        <div>
+            <%= form.label :task_urgency %><br>
+            <%= form.select :task_urgency, [['Normal', '1'], ['Atenção', '2'], ['Urgente', '3']] %>
+        </div>
+        <div class="row">
+            <div class="col-auto">
+                <input name="role_ids" type="hidden" />
+                <%= form.select :role_ids, @roles, { selected: @roles, object: @roles }, multiple: true %>
+            </div>
+        </div>
+
+        <div>
+            <%= form.submit %>
+        </div>
+
+    <% end %>
+</form>
