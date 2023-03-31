@@ -1,7 +1,8 @@
 class TasksController < ApplicationController
     def index
-      @users = User.with_role :admin
-      @tasks = Task.all
+      @tasks = Task.all.joins(:users).select("tasks.*, users.username")
+      @tasks_normal = @tasks.select { |x| x.task_urgency == 1 }
+
     end
     def show
       @task = Task.find(params[:id])
@@ -12,12 +13,14 @@ class TasksController < ApplicationController
         @roles = Role.pluck(:name,:id)
       else
         @users = current_user
-        @roles = @users.roles.map(&:name)
+        @roles = @users.roles.pluck(:name,:id)
+        
       end
   
     end
     def create
       @task = Task.new(task_params)
+      @task.user_ids = current_user.id
   
       if @task.save
         redirect_to @task
@@ -27,6 +30,6 @@ class TasksController < ApplicationController
     end
     private
       def task_params
-        params.require(:task).permit(:task_name, :task_content, :task_expire, :task_files, :task_urgency, role_ids: [])
+        params.require(:task).permit(:task_name, :task_content, :task_urgency, :task_expire, role_ids: [],user_ids: [])
       end
   end
