@@ -36,6 +36,8 @@ gem "figaro"
 #Rails admin
 gem "rails_admin"
 
+#Use popperJS
+gem "popper"
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
@@ -47,6 +49,18 @@ gem "rolify"
 
 # Use Devise to create user authentication
 gem "devise"
+
+#Use jquery
+gem "jquery-rails"
+
+# Use jquery-ui for pretty UI
+gem 'jquery-ui-rails'
+
+# Use Sass to process CSS
+gem "sassc-rails"
+
+#Use tailwindcss
+gem 'tailwindcss-rails'
 # Use Postgres as database
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"

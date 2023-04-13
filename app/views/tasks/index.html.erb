@@ -1,27 +1,56 @@
+<section class="vh-100" style="background-color: #eee;">
 <%= button_to "logout", destroy_user_session_path, method: :delete  %>
+  <div class="container-xl">
+    <div class="row d-flex justify-content-center align-items-center">
+      <div class="col-md-12 col-xl-12">
+        <div class="card">
+          <div class="card-header p-3">
+            <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Task List</h5>
+            <%= link_to "Criar nova tarefa", new_task_path, remote: true %>
+          </div>
+          <div class="card-body" data-mdb-perfect-scrollbar="true" style="position: relative">
+            <table class="table mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Autor</th>
+                  <th scope="col">Tarefa</th>
+                  <th scope="col">Prioridade</th>
+                  <th scope="col">Data Limite</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+              <% @tasks.each do |task| %>
+                <tr class="align-middle">
+                  <th>
+                    <span class="ms-2"><%= task.username %></span>
+                  </th>
+                  <td class="align-middle">
+                    <span><%= task.task_name %></span>
+                  </td>
+                  <td class="align-middle">
+                    <h6 class="mb-0"><span class="badge bg-danger"><%= task.task_urgency %></span></h6>
+                  </td>
+                  <td class="align-middle">
+                    <h6 class="mb-0"><span class="badge bg-danger"><%= task.task_expire %></span></h6>
+                  </td>
+                  <td class="align-middle">
+                      <%= link_to "View Post", task_path(id: task.id), remote: true %>
+                      <button type="button" class="btn btn-sm btn-warning">Adicionar comentário</button>
+                      <button type="button" class="btn btn-sm btn-success">Concluido</button>
+                  </td>
+                </tr>
+              <% end %>
+                
+              </tbody>
+            </table>
 
-<table class="table table-sm table-dark">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Tarefa</th>
-        <th scope="col">Data limite</th>
-        <th scope="col">Prioridade</th>
-        <th scope="col">Autor</th>
-        <th scope="col">Indicador de tempo</th>
-        <th scope="col">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-<% @tasks_normal.each do |task| %>
-      <tr>
-        <th scope="row">1</th>
-        <td><%= task.task_name %></td>
-        <td><%= task.task_expire %></td>
-        <td><%= task.task_urgency %></td>
-        <td><%= task.username %></td>
-      </tr>
-<% end %>
+          </div>
 
-  </tbody>
- </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<div id="show_task_modal" class="modal fade" role="dialog" aria-labelledby="show_task_modal" aria-hidden="true" tabindex="-1"></div>
