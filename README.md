@@ -10,7 +10,7 @@ Esse projeto tem a finalidade de servir como um controle interno para empresas p
 Docker instalado
 
 # Starting
-Clone esse repositorio git clone https://github.com/bogwro/docker-rails-admin.git
+Clone esse repositorio git clone https://github.com/Alexandrephz/TaskController.git
 
 Mude o campo "host" em  config/database.yml com o IP da sua maquina
 
