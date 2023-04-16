@@ -1,0 +1,37 @@
+
+version: "3"
+services:
+  web:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+  postgres:
+    container_name: postgres_dev
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: usr_alexandre
+      POSTGRES_PASSWORD: RGkfQsqhA2e5vtig9x4w8S4s
+      PGDATA: /data/postgres
+    volumes:
+      - postgres-db:/data/postgres
+    ports:
+      - "5432:5432"
+
+  pgadmin4:
+    container_name: pgadmin_dev
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-alexandre.gomes@precolandia.com.br}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-RGkfQsqhA2e5vtig9x4w8S4s}
+    ports:
+      - "80:80"
+    volumes:
+      - pgdata:/var/lib/pgadmin
+
+volumes:
+  postgres-db:
+    driver: local
+  pgdata:
