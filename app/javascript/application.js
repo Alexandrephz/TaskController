@@ -4,7 +4,7 @@
 //= require turbolinks
 //= require bootstrap
 //= require_tree.
-//= require jquery.ui.all
+//= require jquery-ui
 import "@hotwired/turbo-rails"
 import "./controllers"
 import * as bootstrap from "bootstrap"
