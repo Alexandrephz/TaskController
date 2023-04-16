@@ -18,3 +18,5 @@ roles = Role.create([
     { name: "Financeiro"},
     { name: "Logistica"}
 ])
+
+User.create!({:email => "admin@admin.com", :roles => ["admin"], :password => "123456", :password_confirmation => "123456" })
