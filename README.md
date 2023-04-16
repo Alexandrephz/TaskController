@@ -1,24 +1,36 @@
-# README
+# Task Controller
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# PT-BR
 
-Things you may want to cover:
+Projeto de materia da faculdade impacta.
 
-* Ruby version
+Esse projeto tem a finalidade de servir como um controle interno para empresas planejarem tarefas, dividindo por setores, com opcoes de feedbacks das atividades.
 
-* System dependencies
+# Pre Requisitos
+Docker instalado
 
-* Configuration
+# Starting
+Clone esse repositorio git clone https://github.com/bogwro/docker-rails-admin.git
 
-* Database creation
+Mude o campo "host" em  config/database.yml com o IP da sua maquina
 
-* Database initialization
+# Development Environment
 
-* How to run the test suite
+Construe e suba os containers: docker compose up --build
 
-* Services (job queues, cache servers, search engines, etc.)
+Construa o banco de dados: docker compose exec web rails db:create
 
-* Deployment instructions
+Construa as tabelas: docker compose exec web rails db:migrate
 
-* ...
+Envie os dados iniciais: docker compose exec web rails db:seed
+
+Compile os assets da aplicacao: docker compose exec web rails assets:precompile
+
+
+# Acesso
+
+Se estiver subindo em modo de desenvolvimento use http://127.0.0.1:3000
+Use o usuario padrao: admin
+Com a senha padrao: 123456
+
+Pode alterar a senha do usuario padrao pelo http://127.0.0.1:3000/admin
