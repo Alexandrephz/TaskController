@@ -2,10 +2,39 @@
 
 <p><%= @task.task_content %></p>
 
-<ul>
-  <li><%= link_to "Edit", edit_task_path(@task) %></li>
-  <li><%= link_to "Destroy", task_path(@task), data: {
-                    turbo_method: :delete,
-                    turbo_confirm: "Are you sure?"
-                  } %></li>
+<h2>Comments</h2>
+<ul id="comments_list">
+  <%= render @task.comments %>
 </ul>
+<% if @task.task_status? %>
+  <%= link_to "Add Comment", new_task_comment_path(@task), remote: true %>
+<% else %>
+<% end %>
+
+<div id="comment_form_container"></div>
+
+<script>
+  // JavaScript to handle the comment form popup
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector("a[data-remote='true']").addEventListener('click', function(event) {
+      event.preventDefault();
+
+      var url = this.getAttribute('href');
+      var container = document.getElementById('comment_form_container');
+
+      // Load the comment form into the container using AJAX
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            container.innerHTML = xhr.responseText;
+          } else {
+            console.error('Error loading comment form:', xhr.status);
+          }
+        }
+      };
+      xhr.open('GET', url, true);
+      xhr.send();
+    });
+  });
+</script>

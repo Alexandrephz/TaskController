@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_30_225618) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_13_185313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "comments", force: :cascade do |t|
+    t.text "content"
+    t.bigint "task_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_comments_on_task_id"
+  end
 
   create_table "roles", force: :cascade do |t|
     t.string "name"
@@ -22,6 +30,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_30_225618) do
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
+  end
+
+  create_table "status_to_tasks", force: :cascade do |t|
+    t.boolean "task_status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "task_users", id: false, force: :cascade do |t|
@@ -40,6 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_30_225618) do
     t.integer "task_urgency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "task_status"
   end
 
   create_table "tasks_roles", id: false, force: :cascade do |t|
@@ -79,4 +94,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_30_225618) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "comments", "tasks"
 end

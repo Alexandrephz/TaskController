@@ -1,0 +1,8 @@
+// Clear the comment input field
+document.getElementById('comment_content').value = '';
+
+// Append the newly created comment to the comments list
+var commentsList = document.getElementById('comments_list');
+var newComment = document.createElement('li');
+newComment.innerHTML = '<%= j render partial: "comment", locals: { comment: @comment } %>';
+commentsList.appendChild(newComment);

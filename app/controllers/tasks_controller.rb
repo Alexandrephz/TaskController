@@ -5,16 +5,23 @@ class TasksController < ApplicationController
         @tasks_normal = @tasks.select { |x| x.task_urgency == 1 }
         @tasks_prioridade = @tasks.select { |x| x.task_urgency == 2 }
         @tasks_urgente = @tasks.select { |x| x.task_urgency == 3 }
+
       else
         @users = current_user
         @roles = @users.roles.pluck(:id)
         @tasks_ids = TasksRole.where(role_id: @roles).pluck(:task_id)
         @tasks = Task.where(id: @tasks_ids).joins(:users).select("tasks.*, users.username")
+        @tasks_normal = @tasks.select { |x| x.task_urgency == 1 }
+        @tasks_prioridade = @tasks.select { |x| x.task_urgency == 2 }
+        @tasks_urgente = @tasks.select { |x| x.task_urgency == 3 }
+
       end
 
     end
     def show
       @task = Task.find(params[:id])
+      @comments = @task.comments
+      puts @comments
       respond_to do |format|
         format.js
       end
@@ -41,6 +48,17 @@ class TasksController < ApplicationController
         redirect_to @task
       else
         render :new, status: :unprocessable_entity
+      end
+    end
+    def update_status
+      @task = Task.find(params[:id])
+      if @task.task_status == false 
+        @task.update(task_status: true)
+      else
+        @task.update(task_status: false)
+      end
+      respond_to do |format|
+        format.js
       end
     end
 

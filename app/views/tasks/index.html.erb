@@ -2,11 +2,10 @@
 <%= button_to "logout", destroy_user_session_path, method: :delete  %>
   <div class="container-xl">
     <div class="row d-flex justify-content-center align-items-center">
-      <div class="col-md-12 col-xl-12">
         <div class="card">
           <div class="card-header p-3">
-            <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Task List</h5>
-            <%= link_to "Criar nova tarefa", new_task_path, remote: true %>
+          <%= link_to "Criar nova tarefa", new_task_path, remote: true %>
+            <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Tarefas</h5>
           </div>
           <div class="card-body" data-mdb-perfect-scrollbar="true" style="position: relative">
             <table class="table mb-0">
@@ -16,6 +15,7 @@
                   <th scope="col">Tarefa</th>
                   <th scope="col">Prioridade</th>
                   <th scope="col">Data Limite</th>
+                  <th scope="col">Status</th>
                   <th scope="col">Ações</th>
                 </tr>
               </thead>
@@ -29,28 +29,47 @@
                     <span><%= task.task_name %></span>
                   </td>
                   <td class="align-middle">
-                    <h6 class="mb-0"><span class="badge bg-danger"><%= task.task_urgency %></span></h6>
+                  <% if task.task_urgency == 1 %>
+                    <h6 class="mb-0"><span class="badge bg-danger">Tarefa normal</span></h6>
+                  <% elsif task.task_urgency == 2 %>
+                    <h6 class="mb-0"><span class="badge bg-danger">Tarefa com prioridade</span></h6>
+                  <% else %>
+                    <h6 class="mb-0"><span class="badge bg-danger">Tarefa com urgencia</span></h6>
                   </td>
+                  <% end %>
                   <td class="align-middle">
-                    <h6 class="mb-0"><span class="badge bg-danger"><%= task.task_expire %></span></h6>
+                    <% if task.task_expire < Date.today %>
+                      <h6 class="mb-0"><span class="badge bg-danger"><%= task.task_expire %></span></h6>
+                      <span>Tarefa em atraso</span>
+                    <% else %>
+                      <h6 class="mb-0"><span class="badge bg-success"><%= task.task_expire %></span></h6>
+                      <span>Tarefa no prazo</span>
+                    <% end %>
                   </td>
+                  <% if task.task_status? %>
+                    <td class="align-middle">
+                      <h6 class="mb-0"><span class="badge bg-success">Tarefa aberta</span></h6>
+                    </td>
+                    <td class="align-middle">
+                          <%= button_to("View Post",task_path(id: task.id),method: :get, remote: true, :class => "btn btn-sm btn-success") %>
+                          <%= button_to("Add Comment", new_task_comment_path(task_id: task.id),method: :get, remote: true, :class => "btn btn-sm btn-success") %>
+                          <%= button_to('Concluido',update_status_task_path(id: task.id), method: :patch, remote: true, :class => "btn btn-sm btn-success") %>
+                      </td>
+                  <% else %>
                   <td class="align-middle">
-                      <%= link_to "View Post", task_path(id: task.id), remote: true %>
-                      <button type="button" class="btn btn-sm btn-warning">Adicionar comentário</button>
-                      <button type="button" class="btn btn-sm btn-success">Concluido</button>
-                  </td>
+                      <h6 class="mb-0"><span class="badge bg-danger">Tarefa fechada</span></h6>
+                    </td>
+                    <td class="align-middle">
+                        <%= button_to("View Post",task_path(id: task.id),method: :get, remote: true, :class => "btn btn-sm btn-success") %>
+                        <%= button_to('Reabrir',update_status_task_path(id: task.id), method: :patch, remote: true, :class => "btn btn-sm btn-success") %>
+                    </td>
+                  <% end %>
                 </tr>
               <% end %>
-                
               </tbody>
             </table>
-
           </div>
-
         </div>
-
       </div>
-    </div>
   </div>
 </section>
-<div id="show_task_modal" class="modal fade" role="dialog" aria-labelledby="show_task_modal" aria-hidden="true" tabindex="-1"></div>
