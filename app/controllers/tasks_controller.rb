@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
     def index
       if current_user.has_role?(:admin)
-        @tasks = Task.all.joins(:users).select("tasks.*, users.username")
+        @tasks = Task.all.joins(:users).select("tasks.*, users.username").order(task_urgency: :desc)
         @tasks_normal = @tasks.select { |x| x.task_urgency == 1 }
         @tasks_prioridade = @tasks.select { |x| x.task_urgency == 2 }
         @tasks_urgente = @tasks.select { |x| x.task_urgency == 3 }
