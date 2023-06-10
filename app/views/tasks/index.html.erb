@@ -1,75 +1,84 @@
-<section class="vh-100" style="background-color: #eee;">
-<%= button_to "logout", destroy_user_session_path, method: :delete  %>
-  <div class="container-xl">
-    <div class="row d-flex justify-content-center align-items-center">
-        <div class="card">
-          <div class="card-header p-3">
-          <%= link_to "Criar nova tarefa", new_task_path, remote: true %>
-            <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Tarefas</h5>
-          </div>
-          <div class="card-body" data-mdb-perfect-scrollbar="true" style="position: relative">
-            <table class="table mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Autor</th>
-                  <th scope="col">Tarefa</th>
-                  <th scope="col">Prioridade</th>
-                  <th scope="col">Data Limite</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-              <% @tasks.each do |task| %>
-                <tr class="align-middle">
-                  <th>
-                    <span class="ms-2"><%= task.username %></span>
-                  </th>
-                  <td class="align-middle">
-                    <span><%= task.task_name %></span>
-                  </td>
-                  <td class="align-middle">
-                  <% if task.task_urgency == 1 %>
-                    <h6 class="mb-0"><span class="badge bg-danger">Tarefa normal</span></h6>
-                  <% elsif task.task_urgency == 2 %>
-                    <h6 class="mb-0"><span class="badge bg-danger">Tarefa com prioridade</span></h6>
-                  <% else %>
-                    <h6 class="mb-0"><span class="badge bg-danger">Tarefa com urgencia</span></h6>
-                  </td>
-                  <% end %>
-                  <td class="align-middle">
-                    <% if task.task_expire < Date.today %>
-                      <h6 class="mb-0"><span class="badge bg-danger"><%= task.task_expire %></span></h6>
-                      <span>Tarefa em atraso</span>
+  <section class="vh-100" style="background-color: #eee;">
+  <%= button_to "logout", destroy_user_session_path, method: :delete  %>
+    <div class="container-xl">
+      <div class="row d-flex justify-content-center align-items-center">
+          <div class="card">
+            <div class="card-header p-3">
+            <%= link_to "Criar nova tarefa", new_task_path, remote: true %>
+              <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Tarefas</h5>
+              <%= form_for :search, method: :get do |f| -%>
+
+                <%= f.select :date_method, options_for_select( [['Data de expiracao','task_expire'],['Data de criacao','created_at']], selected: @date_method ) -%>
+                <%= f.date_field :start_date, value: @start -%>
+                <%= f.date_field :end_date, value: @end -%>
+                <%= f.select :role_ids, options_for_select(@roles), selected: @role_task, value: @role_name %>
+                <%= f.submit 'Search' -%>
+            
+              <% end -%>
+            </div>
+            <div class="card-body" data-mdb-perfect-scrollbar="true" style="position: relative">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Tarefa</th>
+                    <th scope="col">Prioridade</th>
+                    <th scope="col">Data Limite</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <% @tasks.each do |task| %>
+                  <tr class="align-middle">
+                    <th>
+                      <span class="ms-2"><%= task.username %></span>
+                    </th>
+                    <td class="align-middle">
+                      <span><%= task.task_name %></span>
+                    </td>
+                    <td class="align-middle">
+                    <% if task.task_urgency == 1 %>
+                      <h6 class="mb-0"><span class="badge bg-danger">Tarefa normal</span></h6>
+                    <% elsif task.task_urgency == 2 %>
+                      <h6 class="mb-0"><span class="badge bg-danger">Tarefa com prioridade</span></h6>
                     <% else %>
-                      <h6 class="mb-0"><span class="badge bg-success"><%= task.task_expire %></span></h6>
-                      <span>Tarefa no prazo</span>
+                      <h6 class="mb-0"><span class="badge bg-danger">Tarefa com urgencia</span></h6>
+                    </td>
                     <% end %>
-                  </td>
-                  <% if task.task_status? %>
                     <td class="align-middle">
-                      <h6 class="mb-0"><span class="badge bg-success">Tarefa aberta</span></h6>
+                      <% if task.task_expire < Date.today %>
+                        <h6 class="mb-0"><span class="badge bg-danger"><%= task.task_expire %></span></h6>
+                        <span>Tarefa em atraso</span>
+                      <% else %>
+                        <h6 class="mb-0"><span class="badge bg-success"><%= task.task_expire %></span></h6>
+                        <span>Tarefa no prazo</span>
+                      <% end %>
                     </td>
-                    <td class="align-middle">
-                          <%= button_to("View Post",task_path(id: task.id),method: :get, remote: true, :class => "btn btn-sm btn-success") %>
-                          <%= button_to("Add Comment", new_task_comment_path(task_id: task.id),method: :get, remote: true, :class => "btn btn-sm btn-success") %>
-                          <%= button_to('Concluido',update_status_task_path(id: task.id), method: :patch, remote: true, :class => "btn btn-sm btn-success") %>
+                    <% if task.task_status? %>
+                      <td class="align-middle">
+                        <h6 class="mb-0"><span class="badge bg-success">Tarefa aberta</span></h6>
                       </td>
-                  <% else %>
-                  <td class="align-middle">
-                      <h6 class="mb-0"><span class="badge bg-danger">Tarefa fechada</span></h6>
-                    </td>
+                      <td class="align-middle">
+                            <%= button_to("View Post",task_path(id: task.id),method: :get, remote: true, :class => "btn btn-sm btn-success") %>
+                            <%= button_to("Add Comment", new_task_comment_path(task_id: task.id),method: :get, remote: true, :class => "btn btn-sm btn-success") %>
+                            <%= button_to('Concluido',update_status_task_path(id: task.id), method: :patch, remote: true, :class => "btn btn-sm btn-success") %>
+                        </td>
+                    <% else %>
                     <td class="align-middle">
-                        <%= button_to("View Post",task_path(id: task.id),method: :get, remote: true, :class => "btn btn-sm btn-success") %>
-                        <%= button_to('Reabrir',update_status_task_path(id: task.id), method: :patch, remote: true, :class => "btn btn-sm btn-success") %>
-                    </td>
-                  <% end %>
-                </tr>
-              <% end %>
-              </tbody>
-            </table>
+                        <h6 class="mb-0"><span class="badge bg-danger">Tarefa fechada</span></h6>
+                      </td>
+                      <td class="align-middle">
+                          <%= button_to("View Post",task_path(id: task.id),method: :get, remote: true, :class => "btn btn-sm btn-success") %>
+                          <%= button_to('Reabrir',update_status_task_path(id: task.id), method: :patch, remote: true, :class => "btn btn-sm btn-success") %>
+                      </td>
+                    <% end %>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-  </div>
-</section>
+    </div>
+  </section>

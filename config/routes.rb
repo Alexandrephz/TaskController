@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   resources :tasks do
     patch 'update_status', on: :member
     resources :comments, only: [:new, :create]
+    collection do
+      get 'filter_by_date', to: 'tasks#filter_by_date'
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

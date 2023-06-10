@@ -53,6 +53,8 @@ gem "devise"
 #Use jquery
 gem "jquery-rails"
 
+#Pagination
+gem 'will_paginate'
 # Use jquery-ui for pretty UI
 gem 'jquery-ui-rails'
 
